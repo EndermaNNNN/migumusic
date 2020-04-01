@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: migumusic
+    ports:
+      - "8085:80"
+    restart: always
+    tty: true
+  exp:
+    image: ubuntu:18.04
+    depends_on:
+      - web
+    volumes:
+      - "./injection.py:/injection.py"
+      - "./pyinit.sh:/pyinit.sh"
+    command: bash -c "echo 1 && bash pyinit.sh"
+    stdin_open: true
+    tty: true

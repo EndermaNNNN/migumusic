@@ -9,7 +9,7 @@ services:
   - docker
 
 install :
-    - sudo pip3 install docker-compose
+    - sudo pip install docker-compose
 
 script:
 - docker-compose build && docker-compose up

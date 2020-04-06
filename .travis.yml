@@ -12,4 +12,4 @@ install :
     - sudo pip install docker-compose
 
 script:
-- docker-compose build && docker-compose up
+- bash travis_init.sh

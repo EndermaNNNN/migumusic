@@ -1,0 +1,13 @@
+language: bash
+
+python:
+    - '3.5'
+
+services:
+  - docker
+
+install :
+    - pip install docker-compose
+
+script:
+- docker-compose build && docker-compose up

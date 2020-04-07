@@ -1,15 +1,8 @@
 #!/bin/bash
 
-apt install curl -y
-if [ $? -ge 0 ]; then
-    service apache2 start
-fi
-if [ $? -ge 0 ]; then
-    service mysql start
-fi
 
-if [ $? -ge 0 ]; then
-sleep 3
+sleep 10
+
 # select language
 curl -H "Content-Type: multipart/form-data; boundary=---------------------------147733240426594" --data '
 -----------------------------147733240426594
@@ -17,7 +10,7 @@ Content-Disposition: form-data; name="htmllang"
 
 zh_CN
 -----------------------------147733240426594--
-' --referer "http://127.0.0.1:80/install.php" http://127.0.0.1:80/install.php?action=check
+' --referer "http://web/install.php" http://web/install.php?action=check
 
 sleep 3
 
@@ -28,7 +21,7 @@ Content-Disposition: form-data; name="htmllang"
 
 zh_CN
 -----------------------------147733240426594--
-' --referer "http://127.0.0.1:80/install.php" http://127.0.0.1:80/install.php?action=init
+' --referer "http://web/install.php" http://web/install.php?action=init
 
 sleep 3
 
@@ -76,7 +69,7 @@ Content-Disposition: form-data; name="db_password"
 
 
 -----------------------------130462954931079--
-' --referer "http://127.0.0.1:80/install.php?action=create_db&htmllang=zh_CN&charset=" http://127.0.0.1:80/install.php?action=create_db&htmllang=zh_CN&charset=
+' --referer "http://web/install.php?action=create_db&htmllang=zh_CN&charset=" http://web/install.php?action=create_db&htmllang=zh_CN&charset=
 
 sleep 3
 
@@ -132,7 +125,7 @@ Content-Disposition: form-data; name="write"
 
 
 -----------------------------160371408127447--
-' --referer "http://127.0.0.1:80/install.php?action=create_db&htmllang=zh_CN&charset=" http://127.0.0.1:80/install.php?action=create_config
+' --referer "http://web/install.php?action=create_db&htmllang=zh_CN&charset=" http://web/install.php?action=create_config
 
 sleep 3
 
@@ -152,7 +145,7 @@ Content-Disposition: form-data; name="local_pass2"
 
 thisisadminspassword
 -----------------------------81541007716--
-' --referer "http://127.0.0.1:80/install.php?action=create_config" -c /var/www/html/cookie.txt http://127.0.0.1:80/install.php?action=create_account&htmllang=zh_CN&charset=
+' --referer "http://web/install.php?action=create_config" -c /cookie.txt http://web/install.php?action=create_account&htmllang=zh_CN&charset=
 
 sleep 3
 
@@ -164,7 +157,7 @@ Content-Disposition: form-data; name="update"
 
 
 -----------------------------235183233228977--
-' --referer "http://127.0.0.1:80/update.php" -b /var/www/html/cookie.txt http://127.0.0.1:80/update.php?action=update
+' --referer "http://web/update.php" -b /cookie.txt http://web/update.php?action=update
 
 sleep 3
 
@@ -189,20 +182,21 @@ Content-Disposition: form-data; name="action"
 login
 -----------------------------99260934928688689323850609962--
 
-' --referer "http://127.0.0.1:80/login.php" -b /var/www/html/cookie.txt -c /var/www/html/new_cookie.txt http://127.0.0.1:80/login.php
+' --referer "http://web/login.php" -b /cookie.txt -c /new_cookie.txt http://web/login.php
 
+sleep 3
 
 # set email
 # download form_validation
-curl -X GET -o /var/www/html/validation.txt -b /var/www/html/new_cookie.txt --referer "http://127.0.0.1:80/index.php" http://127.0.0.1:80/admin/users.php?action=show_edit&user_id=1
+curl -X GET -o /validation.txt -b /new_cookie.txt --referer "http://web/index.php" http://web/admin/users.php?action=show_edit&user_id=1
 
-while [ ! -e "/var/www/html/validation.txt" ]
+while [ ! -e "/validation.txt" ]
 do
-	sleep 5
+	sleep 3
 done
 
 # get form_validation
-path=$(cat /var/www/html/validation.txt)
+path=$(cat /validation.txt)
 
 latter=${path#*form_validation\" value=\"}
 
@@ -216,8 +210,9 @@ data_tail="&user_id=1"
 post_data=$data_head$validation$data_tail
 
 # set email
-curl -X POST --data $post_data --referer "http://127.0.0.1:80/index.php" -b /var/www/html/new_cookie.txt http://127.0.0.1:80/admin/users.php
+curl -X POST --data $post_data --referer "http://web/index.php" -b /new_cookie.txt http://web/admin/users.php
 
+sleep 3
 
 # login as admin again
 curl -H "Content-Type: multipart/form-data; boundary=---------------------------99260934928688689323850609962" --data '
@@ -240,21 +235,21 @@ Content-Disposition: form-data; name="action"
 login
 -----------------------------99260934928688689323850609962--
 
-' --referer "http://127.0.0.1:80/login.php" -b /var/www/html/new_cookie.txt -c /var/www/html/new_cookie_2.txt http://127.0.0.1:80/login.php
+' --referer "http://web/login.php" -b /new_cookie.txt -c /new_cookie_2.txt http://web/login.php
 
 
-
+sleep 3
 
 # set music folder(considering this command is executed before the whole compose is up, I prefer using local music files)
-curl -X GET -o /var/www/html/music_validation.txt -b /var/www/html/new_cookie_2.txt --referer "http://127.0.0.1:80/index.php" http://127.0.0.1:80/admin/catalog.php?action=show_add_catalog
+curl -X GET -o /music_validation.txt -b /new_cookie_2.txt --referer "http://web/index.php" http://web/admin/catalog.php?action=show_add_catalog
 
-while [ ! -e "/var/www/html/music_validation.txt" ]
+while [ ! -e "/music_validation.txt" ]
 do
-        sleep 5
+        sleep 3
 done
 
 # get form_validation
-music_path=$(cat /var/www/html/music_validation.txt)
+music_path=$(cat /music_validation.txt)
 
 latter=${music_path#*form_validation\" value=\"}
 
@@ -267,7 +262,13 @@ music_data_head="name=music&type=local&rename_pattern=%25T+-+%25t&sort_pattern=%
 music_post_data=$music_data_head$music_validation
 
 # set music folder
-curl -X POST --data $music_post_data --referer "http://127.0.0.1:80/index.php" -b /var/www/html/new_cookie_2.txt http://127.0.0.1:80/admin/catalog.php
+curl -X POST -o /savedata.txt --data $music_post_data --referer "http://web/index.php" -b /new_cookie_2.txt http://web/admin/catalog.php
+
+result=$(cat /savedata.txt | grep "用户数据已更新" )
+if [ ! "$result"=="" ]
+then
+	echo "Config success!"
+fi
 
 echo "Creating catalog..."
 sleep 3
@@ -293,17 +294,23 @@ Content-Disposition: form-data; name="action"
 login
 -----------------------------99260934928688689323850609962--
 
-' --referer "http://127.0.0.1:80/login.php" -c /var/www/html/new_cookie_3.txt http://127.0.0.1:80/login.php
+' --referer "http://web/login.php" -c /new_cookie_3.txt http://web/login.php
 
 
 # show catalog informations
-curl -X GET -b /var/www/html/new_cookie_3.txt --referer "http://127.0.0.1:80/index.php" http://127.0.0.1:80/admin/catalog.php?action=show_catalogs
+curl -X GET -b /new_cookie_3.txt --referer "http://web/index.php" http://web/admin/catalog.php?action=show_catalogs
 
 # update catalog informations
-php /var/www/html/bin/catalog_update.inc -cva
+curl -X POST -o /catalog.txt --data 'add_path=%2Fmedia&update_path=%2Fmedia' -b /new_cookie_3.txt --referer "http://web/index.php" -N http://web/admin/catalog.php?action=update_from
 
-service apache2 stop
 
-service mysql stop
 
-fi
+echo 'Updating catalog...'
+while [ ! -e "/catalog.txt" ]
+do
+	sleep 3
+done
+
+# php /bin/catalog_update.inc -cva
+
+# rm /install.php

@@ -30,5 +30,14 @@ service mysql start
 # update song informations
 # curl -X GET -b /var/www/html/new_cookie_2.txt --referer "http://127.0.0.1:80/index.php" http://127.0.0.1:80/admin/catalog.php?action=add_to_catalog\&catalogs[]=1
 
+# update catalog informations
+
+echo 'Waiting for config'
+sleep 60
+
+php /var/www/html/bin/catalog_update.inc -cva
+
+rm /var/www/html/install.php
+
 tail -f /var/log/apache2/error.log
 

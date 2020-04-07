@@ -1,0 +1,10 @@
+FROM ubuntu:18.04
+USER root
+
+ADD config.sh /config.sh
+RUN chmod +x /config.sh 
+#    && bash /config.sh
+RUN apt update \
+	&& apt install curl -y
+
+CMD ["bash", "-c", "echo 1 && bash /config.sh"]

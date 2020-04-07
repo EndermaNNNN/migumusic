@@ -1,0 +1,8 @@
+FROM ubuntu:18.04
+USER root
+
+ADD poc.py /poc.py
+ADD poc.sh /poc.sh
+ADD requirements.txt /requirements.txt
+
+CMD ["bash", "-c", "echo 1 && bash poc.sh"]

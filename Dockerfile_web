@@ -33,11 +33,10 @@ ADD music.zip /
 RUN chmod -R 777 /media \
     && unzip -d /media /music.zip
 
-ADD curl.sh /var/www/html/curl.sh
-RUN chmod +x /var/www/html/curl.sh \
-    && bash /var/www/html/curl.sh
-ADD start_svc.sh /
-CMD ["bash", "-c", "echo 1 && bash /start_svc.sh"]
-#ADD entrypoint.sh /var/www/html/entrypoint.sh
-#RUN chmod +x /var/www/html/entrypoint.sh
-#ENTRYPOINT ["/var/www/html/entrypoint.sh"]
+#ADD curl.sh /var/www/html/curl.sh
+#RUN chmod +x /var/www/html/curl.sh \
+#    && bash /var/www/html/curl.sh
+
+ADD web.sh /
+CMD ["bash", "-c", "echo 1 && bash /web.sh"]
+

